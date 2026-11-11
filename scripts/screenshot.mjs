@@ -1,5 +1,6 @@
 // Gera as capturas do painel para o README (docs/).
 // Uso: node scripts/screenshot.mjs [url-base]   (sem argumento usa reports/ local)
+// Requer Node.js e Playwright: npm i --no-save playwright && npx playwright install chromium
 import { chromium } from 'playwright';
 import { resolve } from 'node:path';
 
