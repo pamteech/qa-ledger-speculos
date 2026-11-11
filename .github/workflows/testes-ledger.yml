@@ -1,0 +1,113 @@
+name: Testes Ledger no Speculos
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    # Toda segunda-feira as 08:00 no horario de Brasilia (11:00 UTC).
+    - cron: '0 11 * * 1'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: testes-ledger-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  SPECULOS_IMAGEM: ghcr.io/ledgerhq/speculos@sha256:56c7ec84c903147dac28e68706d3241218a3d9beb9562dd4a8c02947b2a24f47
+
+jobs:
+  testes:
+    name: pytest no emulador
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Baixar o repositorio
+        uses: actions/checkout@v4
+
+      - name: Conferir integridade do app
+        run: echo "b32a7263e5cb506ed931f05668ac12ca8bba5d5e56d1b8708693d98e835f6676  apps/nanosp/bitcoin-testnet-2.6.0.elf" | sha256sum -c -
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Subir o Speculos (Docker)
+        timeout-minutes: 5
+        run: |
+          docker pull "$SPECULOS_IMAGEM"
+          ./scripts/subir-speculos.sh
+
+      - name: Executar testes
+        id: pytest
+        continue-on-error: true
+        timeout-minutes: 10
+        run: python -m pytest --timeout 90 --html=reports/pytest/index.html --self-contained-html
+
+      - name: Guardar log do emulador
+        if: always()
+        run: docker logs speculos > reports/speculos.log 2>&1 || true
+
+      - name: Montar painel
+        if: always()
+        run: python scripts/montar_painel.py
+
+      - name: Resumo da execucao
+        if: always()
+        run: |
+          python - >> "$GITHUB_STEP_SUMMARY" <<'PY'
+          import json
+          d = json.load(open("reports/resultados.json"))
+          c = d["casos"]
+          ok = sum(x["resultado"] == "aprovado" for x in c)
+          print("## Testes Ledger no Speculos\n")
+          print(f"App {d['meta']['app']} {d['meta']['app_versao']} no modelo {d['meta']['modelo']}.\n")
+          print(f"| Execucoes | Aprovadas | Reprovadas |\n|---|---|---|\n| {len(c)} | {ok} | {len(c) - ok} |")
+          PY
+
+      - name: Guardar relatorios
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorios
+          path: reports
+          retention-days: 14
+
+      - name: Preparar artefato do GitHub Pages
+        if: always() && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: reports
+
+      - name: Avaliar resultado
+        if: always()
+        run: |
+          if [ "${{ steps.pytest.outcome }}" != "success" ]; then
+            echo "Testes reprovados."
+            exit 1
+          fi
+
+  publicar:
+    name: GitHub Pages
+    needs: testes
+    if: always() && github.ref == 'refs/heads/main' && needs.testes.result != 'cancelled'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar relatorios
+        id: deployment
+        uses: actions/deploy-pages@v4

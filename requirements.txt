@@ -1,0 +1,7 @@
+# Dependencias dos testes (o emulador roda em Docker na CI).
+embit==0.8.0
+ledger_bitcoin==0.4.2
+pytest==9.2.0
+pytest-html==4.2.0
+pytest-timeout==2.4.0
+requests==2.34.2
