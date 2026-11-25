@@ -1,16 +1,16 @@
 # QA Ledger Speculos
 
-[![Testes Ledger no Speculos](https://github.com/pamteech/qa-ledger-speculos/actions/workflows/testes-ledger.yml/badge.svg)](https://github.com/pamteech/qa-ledger-speculos/actions/workflows/testes-ledger.yml)
-[![Relatório](https://img.shields.io/badge/relat%C3%B3rio-GitHub%20Pages-0B1F3A)](https://pamteech.github.io/qa-ledger-speculos/)
-![pytest](https://img.shields.io/badge/pytest-Speculos-1E6B4F)
-![Ledger](https://img.shields.io/badge/Ledger-Nano%20S%20Plus-1E6B4F)
-![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-5B6678)
+![Painel de qualidade](docs/painel.png)
+
+[![Testes Ledger no Speculos](https://img.shields.io/github/actions/workflow/status/pamteech/qa-ledger-speculos/testes-ledger.yml?label=CI&labelColor=0D0B1E&color=39FF88)](https://github.com/pamteech/qa-ledger-speculos/actions/workflows/testes-ledger.yml)
+[![Relatório](https://img.shields.io/badge/relat%C3%B3rio-GitHub%20Pages-A855F7?labelColor=0D0B1E)](https://pamteech.github.io/qa-ledger-speculos/)
+![pytest](https://img.shields.io/badge/pytest-Speculos-22D3EE?labelColor=0D0B1E)
+![Ledger](https://img.shields.io/badge/Ledger-Nano%20S%20Plus-A855F7?labelColor=0D0B1E)
+![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-22D3EE?labelColor=0D0B1E)
 
 Suíte de testes automatizados de uma carteira de hardware **Ledger Nano S Plus** rodando no emulador oficial **Speculos**, com o app **Bitcoin Test 2.6.0**. Os testes conversam com o app por APDU, leem a tela do aparelho pela API REST do Speculos, apertam os botões como uma pessoa faria e conferem cada resultado com um oráculo criptográfico independente.
 
 **Relatório ao vivo:** https://pamteech.github.io/qa-ledger-speculos/
-
-![Painel de qualidade](docs/painel.png)
 
 ## Objetivo
 
