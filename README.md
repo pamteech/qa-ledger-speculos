@@ -2,7 +2,7 @@
 
 ![Painel de qualidade](docs/painel.png)
 
-[![Testes Ledger no Speculos](https://img.shields.io/github/actions/workflow/status/pamteech/qa-ledger-speculos/testes-ledger.yml?label=CI&labelColor=0D0B1E&color=39FF88)](https://github.com/pamteech/qa-ledger-speculos/actions/workflows/testes-ledger.yml)
+[![Testes Ledger no Speculos](https://img.shields.io/github/actions/workflow/status/pamteech/qa-ledger-speculos/testes-ledger.yml?label=testes&labelColor=0D0B1E&color=39FF88)](https://github.com/pamteech/qa-ledger-speculos/actions/workflows/testes-ledger.yml)
 [![Relatório](https://img.shields.io/badge/relat%C3%B3rio-GitHub%20Pages-A855F7?labelColor=0D0B1E)](https://pamteech.github.io/qa-ledger-speculos/)
 ![pytest](https://img.shields.io/badge/pytest-Speculos-22D3EE?labelColor=0D0B1E)
 ![Ledger](https://img.shields.io/badge/Ledger-Nano%20S%20Plus-A855F7?labelColor=0D0B1E)
